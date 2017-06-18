@@ -11,13 +11,12 @@
         {% if categories %}
             <ul>
                 {% for category in categories %}
-                <li> {{category.name }}</li>
+                <li> <a href = "/rango/category/{{ category.slug }}">{{ category.name }}</a></li>
                 {% endfor %}
             </ul>
         {% else %}
             <strong> There are no category present. </strong>
         {% endif %}
         <a href="/rango/about/">About</a><br />
-        <img src="{% static "images/rango.jpg" %}" alt="Picture of Rango" /> <!-- New line -->
     </body>
 </html>
