@@ -1,8 +1,9 @@
-from django.conf import settings
-from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from registration.backends.simple.views import RegistrationView
+from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import patterns, include, url
+from registration.backends.simple.views import RegistrationView
+
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
@@ -11,7 +12,8 @@ urlpatterns = patterns('',
 )
 
 if not settings.DEBUG:
-        urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.STATIC_URL,
+                          document_root=settings.STATIC_ROOT)
 
 
 if settings.DEBUG:

@@ -1,24 +1,28 @@
 """Put Package Comments here..."""
+from datetime import datetime
+
 #################################
 # Default Django imports
 #################################
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.http import HttpResponse
+from django.contrib.auth import login
+from django.contrib.auth import logout
+from django.contrib.auth import authenticate 
+# from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 #################################
 # Internal Project Dependecies
 #################################
-from rango.models import Category
 from rango.models import Page
-from rango.forms import CategoryForm
+from rango.models import Category
+
 from rango.forms import PageForm
-from rango.forms import UserForm, UserProfileForm
-from django.contrib.auth import authenticate, login
-from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
-from datetime import datetime
+from rango.forms import UserForm
+from rango.forms import CategoryForm
+from rango.forms import UserProfileForm
 
 # Remember to use .gitignore in your code so that files like `.idea` will
 # not be commited in the code
