@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from django.contrib.auth import login
 from django.contrib.auth import logout
-from django.contrib.auth import authenticate 
+from django.contrib.auth import authenticate
 # from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 
@@ -23,6 +23,8 @@ from rango.forms import PageForm
 from rango.forms import UserForm
 from rango.forms import CategoryForm
 from rango.forms import UserProfileForm
+from django.shortcuts import redirect
+
 
 # Remember to use .gitignore in your code so that files like `.idea` will
 # not be commited in the code
@@ -64,7 +66,7 @@ def index(request, *args, **kwargs):
     # The mistake in your code is path of the templates file
     # Also, you might need to implement TEMPLATES in settings.py file of your
     # project
-    #return render(request, 'rango/index.html', context_dict)
+    # return render(request, 'rango/index.html', context_dict)
     # return render(request=request,
     #               template_name='rango/index.html',
     #               context=context_dict,
@@ -80,7 +82,7 @@ def index(request, *args, **kwargs):
     if last_visit:
         last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
 
-        if (datetime.now() - last_visit_time).days > 0:
+        if (datetime.now() - last_visit_time).seconds > 0:
             # ...reassign the value of the cookie to +1 of what it was before...
             visits = visits + 1
             # ...and update the last visit cookie, too.
@@ -126,7 +128,7 @@ def category(request, category_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
         context_dict['category_name'] = category.name
-        pages = Page.objects.filter(category=category)
+        pages = Page.objects.filter(category=category).order_by('-views')
         context_dict['pages'] = pages
         context_dict['category'] = category
     except Category.DoesNotExist:
@@ -137,7 +139,6 @@ def category(request, category_name_slug):
 
 @login_required
 def add_category(request):
-
     # A HTTP POST?
     if request.method == 'POST':
         form = CategoryForm(request.POST)
@@ -164,11 +165,10 @@ def add_category(request):
 
 @login_required
 def add_page(request, category_name_slug):
-
     try:
         cat = Category.objects.get(slug=category_name_slug)
     except Category.DoesNotExist:
-                cat = None
+        cat = None
 
     if request.method == 'POST':
         form = PageForm(request.POST)
@@ -304,3 +304,59 @@ def restricted(request):
 #
 #     # Take the user back to the homepage.
 #     return HttpResponseRedirect('/rango/')
+
+
+def track_url(request):
+    page_id = None
+    url = '/rango/'
+    if request.method == 'GET':
+        if 'page_id' in request.GET:
+            page_id = request.GET['page_id']
+            try:
+                page = Page.objects.get(id=page_id)
+                page.views = page.views + 1
+                page.save()
+                url = page.url
+            except:
+                pass
+
+    return redirect(url)
+
+
+@login_required
+def like_category(request):
+    cat_id = None
+    if request.method == 'GET':
+        cat_id = request.GET['category_id']
+
+    likes = 0
+    if cat_id:
+        cat = Category.objects.get(id=int(cat_id))
+        if cat:
+            likes = cat.likes + 1
+            cat.likes = likes
+            cat.save()
+
+    return HttpResponse(likes)
+
+
+def get_category_list(max_results=0, starts_with=''):
+    cat_list = []
+    if starts_with:
+        cat_list = Category.objects.filter(name__istartswith=starts_with)
+    if max_results > 0:
+        if len(cat_list) > max_results:
+            cat_list = cat_list[:max_results]
+
+    return cat_list
+
+
+def suggest_category(request):
+    cat_list = []
+    starts_with = ''
+    if request.method == 'GET':
+        starts_with = request.GET['suggestion']
+
+    cat_list = get_category_list(2, starts_with)
+
+    return render(request, 'rango/cats.html', {'cats': cat_list})
