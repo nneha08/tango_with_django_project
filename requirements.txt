@@ -98,7 +98,7 @@ pbr==3.0.1
 pexif==0.15
 pexpect==4.2.1
 pika==0.10.0
-Pillow==4.1.1
+Pillow==8.1.1
 PredictionIO==0.9.8
 prompt-toolkit==1.0.14
 protobuf==3.3.0
