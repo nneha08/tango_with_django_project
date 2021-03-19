@@ -67,7 +67,7 @@ ipaddress==1.0.18
 ipython-genutils==0.2.0
 itsdangerous==0.24
 jieba==0.35
-Jinja2==2.9.6
+Jinja2==2.11.3
 jmespath==0.9.3
 jsonschema==2.6.0
 jupyter-client==5.0.1
