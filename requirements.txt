@@ -120,7 +120,7 @@ python-dateutil==2.6.0
 python-gcm==0.4
 python-magic==0.4.13
 pytz==2017.2
-PyYAML==3.12
+PyYAML==5.4
 pyzmq==16.0.2
 queuelib==1.4.2
 redis==2.10.5
