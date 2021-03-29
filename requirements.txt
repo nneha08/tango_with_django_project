@@ -110,7 +110,7 @@ pycparser==2.17
 pycurl==7.43.0
 PyDispatcher==2.0.5
 pyglet==1.2.4
-Pygments==2.2.0
+Pygments==2.7.4
 pyOpenSSL==17.0.0
 pyparsing==2.2.0
 Pyro4==4.59
